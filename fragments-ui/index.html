@@ -1,42 +1,73 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>fragments-ui</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body { font-family: system-ui, Arial; max-width: 780px; margin: 2rem auto; }
-      textarea { width: 100%; height: 120px; }
-      button { padding: 0.6rem 1rem; margin-right: .5rem; }
-      .row { margin: 1rem 0; }
-      .small { color: #555; font-size: .9rem; }
-      pre { background: #f6f8fa; padding: 1rem; overflow: auto; }
-      .token { word-break: break-all; }
-    </style>
+    <title>Fragments UI - Assignment 2</title>
   </head>
   <body>
-    <h1>Fragments UI</h1>
-    <div class="row small">
-      API: <code id="api"></code><br/>
-      Cognito: <code id="domain"></code>
-    </div>
+    <h1>Fragments UI (Testing Panel)</h1>
 
-    <div class="row">
-      <button id="login">Login with Cognito</button>
-      <button id="logout" disabled>Logout</button>
-    </div>
+    <section>
+      <h2>1. Authentication</h2>
+      <p>
+        For local testing you can use Basic Auth (user/pass123). For Cognito,
+        plug in your token logic later.
+      </p>
+      <label>
+        Username:
+        <input id="username" type="text" value="user" />
+      </label>
+      <label>
+        Password:
+        <input id="password" type="password" value="pass123" />
+      </label>
+      <button id="set-auth">Set Auth Header</button>
+      <p id="auth-status"></p>
+    </section>
 
-    <div id="auth" class="row small"></div>
+    <section>
+      <h2>2. Create Fragment</h2>
+      <label>
+        Content Type:
+        <select id="fragment-type">
+          <option value="text/plain">text/plain</option>
+          <option value="text/markdown">text/markdown</option>
+          <option value="application/json">application/json</option>
+        </select>
+      </label>
+      <br />
+      <label>
+        Content:
+        <textarea id="fragment-body" rows="5" cols="60">
+# Example Markdown
 
-    <div class="row">
-      <textarea id="text" placeholder="Type a text/plain fragment..."></textarea><br/>
-      <button id="create" disabled>Create Fragment</button>
-    </div>
+**Hello** from UI</textarea
+        >
+      </label>
+      <br />
+      <button id="create-fragment">Create Fragment</button>
+      <pre id="create-result"></pre>
+    </section>
 
-    <div class="row">
-      <h3>Last Response</h3>
-      <pre id="out">(empty)</pre>
-    </div>
+    <section>
+      <h2>3. List Fragments (expand=1)</h2>
+      <button id="load-fragments">Load Fragments</button>
+      <pre id="fragments-list"></pre>
+    </section>
+
+    <section>
+      <h2>4. Fetch Single Fragment</h2>
+      <label>
+        Fragment ID:
+        <input id="fragment-id" type="text" placeholder="paste id here" />
+      </label>
+      <button id="get-fragment">GET /v1/fragments/:id</button>
+      <button id="get-fragment-info">GET /v1/fragments/:id/info</button>
+      <button id="get-fragment-html">
+        GET /v1/fragments/:id.html (Markdown → HTML)
+      </button>
+      <pre id="fragment-output"></pre>
+    </section>
 
     <script type="module" src="/main.js"></script>
   </body>
