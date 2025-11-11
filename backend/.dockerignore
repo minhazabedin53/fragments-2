@@ -1,16 +1,41 @@
-.github/
-.vscode/
-coverage/
-node_modules/
-tests/
-.env
-.git/
-.gitignore
-.prettier*
-jest*
-eslint.config.js
-.eslintrc.json
-*.log
-*.md
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
+# Git / VCS
+.git
+.gitignore
+.github
+
+# Test & coverage files (not needed in runtime image)
+coverage
+__tests__/
+tests/
 !tests/.htpasswd
+*.test.js
+*.spec.js
+jest.config.*
+.vscode
+.idea
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Docker-related
+.dockerignore
+docker-compose.yml
+
+# Temporary / misc
+tmp/
+*.tmp
+*.pid
+*.seed
+*.tgz
+
+# OS junk
+.DS_Store
+Thumbs.db
