@@ -1,21 +1,26 @@
-// Supported content types for Assignment 2
-// (text/plain, text/markdown, application/json, text/html)
-
-export function mediaTypeOf(contentType = "") {
-  const [type] = String(contentType).split(";");
+// Normalize media type: strip parameters, lowercase
+export function mediaTypeOf(contentType = '') {
+  const [type] = String(contentType).split(';');
   const base = type.trim().toLowerCase();
 
-  if (base === "text/x-markdown") return "text/markdown";
+  // Normalize old markdown type
+  if (base === 'text/x-markdown') return 'text/markdown';
 
   return base;
 }
 
-export function isSupportedType(contentType = "") {
-  const supported = new Set([
-    "text/plain",
-    "text/markdown",
-    "application/json",
-    "text/html",
-  ]);
-  return supported.has(mediaTypeOf(contentType));
+// Assignment 2:
+// - Allow ANY text/*
+// - Allow application/json
+export function isSupportedType(contentType = '') {
+  const type = mediaTypeOf(contentType);
+  if (!type) return false;
+
+  // Any text/* subtype is valid (text/plain, text/markdown, text/html, etc.)
+  if (type.startsWith('text/')) return true;
+
+  // JSON support
+  if (type === 'application/json') return true;
+
+  return false;
 }

@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">76.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>10/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>5/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -84,47 +84,62 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">58x</span>
-<span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">33x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">33x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">33x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// Supported content types for Assignment 2
-// (text/plain, text/markdown, application/json, text/html)
-&nbsp;
-export function mediaTypeOf(contentType = <span class="branch-0 cbranch-no" title="branch not covered" >"")</span> {
-  const [type] = String(contentType).split(";");
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// Normalize media type: strip parameters, lowercase
+export function mediaTypeOf(contentType = <span class="branch-0 cbranch-no" title="branch not covered" >'')</span> {
+  const [type] = String(contentType).split(';');
   const base = type.trim().toLowerCase();
 &nbsp;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (base === "text/x-markdown") <span class="cstat-no" title="statement not covered" >return "text/markdown";</span>
+  // Normalize old markdown type
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (base === 'text/x-markdown') <span class="cstat-no" title="statement not covered" >return 'text/markdown';</span>
 &nbsp;
   return base;
 }
 &nbsp;
-export function isSupportedType(contentType = <span class="branch-0 cbranch-no" title="branch not covered" >"")</span> {
-  const supported = new Set([
-    "text/plain",
-    "text/markdown",
-    "application/json",
-    "text/html",
-  ]);
-  return supported.has(mediaTypeOf(contentType));
+// Assignment 2:
+// - Allow ANY text/*
+// - Allow application/json
+export function isSupportedType(contentType = <span class="branch-0 cbranch-no" title="branch not covered" >'')</span> {
+  const type = mediaTypeOf(contentType);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (!type) <span class="cstat-no" title="statement not covered" >return false;</span>
+&nbsp;
+  // Any text/* subtype is valid (text/plain, text/markdown, text/html, etc.)
+  if (type.startsWith('text/')) return true;
+&nbsp;
+  // JSON support
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (type === 'application/json') <span class="cstat-no" title="statement not covered" >return true;</span>
+&nbsp;
+  return false;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -133,7 +148,7 @@ export function isSupportedType(contentType = <span class="branch-0 cbranch-no" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-11T03:45:52.128Z
+                at 2025-11-11T04:17:56.687Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
