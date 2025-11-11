@@ -4,10 +4,15 @@ import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 import authorize from "./auth-middleware.js";
 import logger from "../logger.js";
+import {
+  AWS_REGION,
+  COGNITO_POOL_ID,
+  COGNITO_APP_CLIENT_ID,
+} from "../config.js";
 
-// Required env vars when AUTH_STRATEGY=cognito
-const REGION = process.env.AWS_REGION;
-const USER_POOL_ID = process.env.COGNITO_POOL_ID;
+// Read from config (dotenv already loaded there)
+const REGION = AWS_REGION;
+const USER_POOL_ID = COGNITO_POOL_ID;
 
 const ISSUER =
   REGION && USER_POOL_ID
@@ -15,17 +20,27 @@ const ISSUER =
     : null;
 
 let client = null;
+
 if (ISSUER) {
-  client = jwksClient({ jwksUri: `${ISSUER}/.well-known/jwks.json` });
+  client = jwksClient({
+    jwksUri: `${ISSUER}/.well-known/jwks.json`,
+  });
+  logger.info(
+    { issuer: ISSUER },
+    "Cognito issuer configured, JWKS client initialized",
+  );
 } else {
   logger.warn(
     "Cognito issuer not configured (check AWS_REGION and COGNITO_POOL_ID)",
   );
 }
 
-// Get signing key for JWT verification
+// Helper for JWT verification: get signing key dynamically
 function getKey(header, callback) {
-  if (!client) return callback(new Error("JWKS client not configured"));
+  if (!client) {
+    return callback(new Error("JWKS client not configured"));
+  }
+
   client.getSigningKey(header.kid, (err, key) => {
     if (err) return callback(err);
     try {
@@ -37,7 +52,7 @@ function getKey(header, callback) {
   });
 }
 
-// Configure Passport Bearer strategy to validate Cognito access tokens
+// Configure Bearer strategy for Cognito access tokens
 passport.use(
   new BearerStrategy((token, done) => {
     if (!ISSUER) {
@@ -51,8 +66,8 @@ passport.use(
       {
         algorithms: ["RS256"],
         issuer: ISSUER,
-        // If you want to enforce the client/app audience, uncomment:
-        // audience: process.env.COGNITO_APP_CLIENT_ID,
+        // Optionally enforce app client:
+        // audience: COGNITO_APP_CLIENT_ID,
       },
       (err, decoded) => {
         if (err || !decoded) {
@@ -60,7 +75,6 @@ passport.use(
           return done(null, false);
         }
 
-        // Prefer email; fall back to username/sub for owner hashing
         const email =
           decoded.email ||
           decoded.username ||
@@ -68,16 +82,19 @@ passport.use(
           decoded.sub;
 
         if (!email) {
-          logger.warn({ decoded }, "No email/username/sub in token");
-        } else {
-          logger.debug({ email }, "Cognito token accepted");
+          logger.warn(
+            { decoded },
+            "Cognito token missing email/username/sub; cannot derive ownerId",
+          );
+          return done(null, false);
         }
 
+        logger.debug({ email }, "Cognito token accepted");
         return done(null, { email });
       },
     );
   }),
 );
 
-// Export authenticate() using our common authorize wrapper
+// Export authenticate() using our generic wrapper
 export const authenticate = () => authorize("bearer");

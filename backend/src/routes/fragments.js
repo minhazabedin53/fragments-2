@@ -2,7 +2,7 @@ import { Router } from "express";
 import express from "express";
 import contentType from "content-type";
 
-import { authenticate } from "../auth/basic-auth.js";
+import { authenticate } from "../auth/index.js";
 import Fragment from "../model/fragment.js";
 import { API_URL } from "../config.js";
 

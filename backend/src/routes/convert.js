@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticate } from "../auth/basic-auth.js";
+import { authenticate } from "../auth/index.js";
 import { convertFragment } from "../services/convert.js";
 
 const router = Router();
