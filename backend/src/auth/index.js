@@ -1,11 +1,23 @@
 import { AUTH_STRATEGY } from "../config.js";
-import * as basic from "./basic-auth.js";
-import * as cognito from "./cognito.js";
+import { authenticate as basicAuth } from "./basic-auth.js";
+import { authenticate as cognitoAuth } from "./cognito.js";
 
+/**
+ * Chooses the correct authentication strategy based on AUTH_STRATEGY env var.
+ * Supports:
+ *   - Basic Auth  → used for local dev, tests (Hurl, CI)
+ *   - Cognito     → used for production or EC2 deployment
+ *
+ * Default: Basic Auth
+ */
 export function authenticate() {
-  if (AUTH_STRATEGY === "cognito") {
-    return cognito.authenticate();
+  const strategy = (AUTH_STRATEGY || "basic").toLowerCase();
+
+  if (strategy === "cognito") {
+    console.log("[Auth] Using Cognito authentication strategy");
+    return cognitoAuth();
   }
-  // default: basic auth
-  return basic.authenticate();
+
+  console.log("[Auth] Using Basic authentication strategy");
+    return basicAuth();
 }
