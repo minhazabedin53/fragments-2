@@ -7,7 +7,6 @@ import logger from "../logger.js";
 import {
   AWS_REGION,
   COGNITO_POOL_ID,
-  COGNITO_APP_CLIENT_ID,
 } from "../config.js";
 
 // Read from config (dotenv already loaded there)
