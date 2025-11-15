@@ -4,10 +4,7 @@ import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 import authorize from "./auth-middleware.js";
 import logger from "../logger.js";
-import {
-  AWS_REGION,
-  COGNITO_POOL_ID,
-} from "../config.js";
+import { AWS_REGION, COGNITO_POOL_ID } from "../config.js";
 
 // Read from config (dotenv already loaded there)
 const REGION = AWS_REGION;

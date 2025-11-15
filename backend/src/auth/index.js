@@ -19,6 +19,6 @@ export function authenticate() {
     return cognitoAuth();
   }
 
-    logger.info("[Auth] Using Basic authentication strategy");
-    return basicAuth();
+  logger.info("[Auth] Using Basic authentication strategy");
+  return basicAuth();
 }
