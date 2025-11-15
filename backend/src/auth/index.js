@@ -1,4 +1,5 @@
 import { AUTH_STRATEGY } from "../config.js";
+import logger from "./logger.js";
 import { authenticate as basicAuth } from "./basic-auth.js";
 import { authenticate as cognitoAuth } from "./cognito.js";
 
