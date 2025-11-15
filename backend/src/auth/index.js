@@ -14,10 +14,10 @@ export function authenticate() {
   const strategy = (AUTH_STRATEGY || "basic").toLowerCase();
 
   if (strategy === "cognito") {
-    console.log("[Auth] Using Cognito authentication strategy");
+    logger.info("[Auth] Using Cognito authentication strategy");
     return cognitoAuth();
   }
 
-  console.log("[Auth] Using Basic authentication strategy");
+    logger.info("[Auth] Using Basic authentication strategy");
     return basicAuth();
 }

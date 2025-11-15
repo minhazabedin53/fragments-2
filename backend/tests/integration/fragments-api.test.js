@@ -2,8 +2,7 @@ import request from "supertest";
 import app from "../../src/app.js";
 
 const auth = () => ({
-  Authorization:
-    "Basic " + Buffer.from("user@example.com:pass").toString("base64"),
+  Authorization: "Basic " + Buffer.from("user:pass123").toString("base64"),
 });
 
 describe("Fragments API (A1 scope)", () => {
